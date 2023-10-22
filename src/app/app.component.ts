@@ -8,9 +8,6 @@ import {fromEvent, Observable} from "rxjs";
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-
-  documentStream = fromEvent('document' as any, 'mousemove');
-
   title = 'coding-challenge-v2';
   tasks = [
     {

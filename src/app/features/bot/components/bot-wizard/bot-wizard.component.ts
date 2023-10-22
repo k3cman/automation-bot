@@ -36,4 +36,8 @@ export class BotWizardComponent {
   overview() {
     this.wizardStep.next(BotWizardSteps.RUN_ACTION)
   }
+
+  finish() {
+    this.elementSelector.finish()
+  }
 }

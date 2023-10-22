@@ -7,21 +7,21 @@
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.LOOP"
   title="Step 1. For loop"
   >
-    <app-bot-for-loop (nextStep)="childAction()"></app-bot-for-loop>
+    <app-bot-for-loop (next)="childAction()"></app-bot-for-loop>
   </app-bot-wizard-container>
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.CHILD_ACTION"
     title="Step 2. Choose and child-action on each loop element"
   >
-    <app-bot-child-action (nextStep)="childContainer()"></app-bot-child-action>
+    <app-bot-child-action (next)="childContainer()"></app-bot-child-action>
   </app-bot-wizard-container>
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.SELECT_CHILD"
-    title="Step 3. Click a button"
+    title="Step 3. Click a button or input"
   >
-    <app-bot-select-child (nextStep)="overview()"></app-bot-select-child>
+    <app-bot-select-child (next)="overview()"></app-bot-select-child>
   </app-bot-wizard-container>
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.RUN_ACTION"
   title="Finish"
   >
-    <app-bot-wizard-run></app-bot-wizard-run>
+    <app-bot-wizard-run (next)="finish()"></app-bot-wizard-run>
   </app-bot-wizard-container>
 </div>

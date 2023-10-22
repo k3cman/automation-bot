@@ -1,2 +1,13 @@
-<p>bot-child-action works!</p>
-<button (click)="nextStep.emit()">Next step</button>
+<div>
+  Add action you want the bot to do on the page
+  <div class="flex mt-2">
+    <div class="flex w-36 flex-col items-center text-center border p-2 bg-slate-100 h-full cursor-pointer" (click)="clickButton()">
+      <p class="text-lg">Click button</p>
+      <span class="text-xs text-slate-400"> allows you to click on a button for the element</span>
+    </div>
+    <div class="flex w-36 flex-col items-center text-center border p-2 bg-slate-100 h-full ml-5 cursor-pointer" (click)="modifyInput()">
+      <p class="text-lg">Input</p>
+      <span class="text-xs text-slate-400"> allow you to input text for each element</span>
+    </div>
+  </div>
+</div>

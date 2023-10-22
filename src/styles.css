@@ -302,3 +302,6 @@ ul.todo-list li .delete:after {
   @apply border-dashed border-2 border-amber-500
 }
 
+.hover-border-child{
+  @apply border-dashed border-2 border-red-500
+}
