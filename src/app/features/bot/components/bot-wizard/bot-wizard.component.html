@@ -1,6 +1,5 @@
 <div [ngSwitch]="wizardStep$ | async" class="max-w-5xl w-5xl ml-auto mr-auto h-full">
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.OFF"
-
   >
     <app-bot-wizard-initial (next)="start()"></app-bot-wizard-initial>
   </app-bot-wizard-container>

@@ -48,3 +48,18 @@ export const createSelector = (el:Element):string => {
 
   return elementSelector
 }
+
+export const compareTwoNodes = (elements: Element[]):boolean => {
+  const [first, second] = elements;
+  const tagName = first.tagName === second.tagName
+  const className = first.className.replace('hover-border-child','')
+    .replace('selected-sub-element','')
+    .replace('hover-border', '')
+    .replace('selected-element', '')
+    .trim() === second.className.replace('hover-border-child','')
+    .replace('selected-sub-element','')
+    .replace('hover-border', '')
+    .replace('selected-element', '')
+    .trim()
+  return (tagName && className)
+}

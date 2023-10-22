@@ -1,6 +1,11 @@
 import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
 import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil, tap} from "rxjs";
-import {createSelector, preventAll, removeHelperClasses} from "../features/bot/utils/element-selector.helpers";
+import {
+  compareTwoNodes,
+  createSelector,
+  preventAll,
+  removeHelperClasses
+} from "../features/bot/utils/element-selector.helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +15,27 @@ export class ElementSelectorService {
   mouseMove$!: Observable<MouseEvent>;
   mouseClick$!: Observable<any>;
   private currentElement: EventTarget | null = null;
-  private selectedElements = new BehaviorSubject<EventTarget[]>([])
   private loopMode = new BehaviorSubject<'INPUT' | 'BUTTON' | null>(null)
+  loopMode$ = this.loopMode.asObservable();
+  private selectedElements = new BehaviorSubject<EventTarget[]>([])
   selectedElements$ = this.selectedElements.asObservable().pipe(
     tap((val) => {
-      console.log((val as any).tagName)
       if(val.length >= 2){
+      if(compareTwoNodes(Array.from(document.querySelectorAll('.selected-element')))){
         this.destroy$.next()
         this.destroy$.complete()
-
         window.removeEventListener('click', preventAll, true)
+      }else{
+        setTimeout(() => {
+          removeHelperClasses()
+          this.selectedElements.next([])
+        })
+      }
       }
     })
   )
-
   private selectedSubElement = new BehaviorSubject<any>(undefined)
   selectedSubElement$ = this.selectedSubElement.asObservable()
-
   private renderer2!: Renderer2;
   constructor(
     private renderer:RendererFactory2
@@ -35,7 +44,6 @@ export class ElementSelectorService {
   }
 
   start():void {
-
     window.addEventListener('click', preventAll, true)
     const selectable = document.querySelector('#selectable') as Element;
     this.mouseMove$ = fromEvent<MouseEvent>(selectable, 'mousemove').pipe(
@@ -55,8 +63,8 @@ export class ElementSelectorService {
 
   private listenToMouseClick(){
     this.mouseClick$.subscribe(data => {
-      this.selectedElements.next([...this.selectedElements.getValue(), data.target as EventTarget])
       this.renderer2.addClass(data.target, 'selected-element')
+      this.selectedElements.next([...this.selectedElements.getValue(), data.target as EventTarget])
     })
   }
 
@@ -101,7 +109,7 @@ export class ElementSelectorService {
 
   }
 
-  finish() {
+  finish(value = '') {
 
     const parent = document.querySelector('.selected-element') as Element;
     const parentSelector = createSelector(document.querySelector('.selected-element') as Element);
@@ -112,30 +120,19 @@ export class ElementSelectorService {
 
     const elements = document.querySelectorAll(parentSelector + ' > ' + childSelector)
     if(this.loopMode.getValue() === 'INPUT'){
-      elements.forEach(el => el.setAttribute('value', 'nemanja'))
+      elements.forEach(el => el.setAttribute('value', value))
     }else{
       elements.forEach(el => (el as any).click())
     }
 
     removeHelperClasses()
-
-
-    // const els = document.querySelectorAll(`${parentsTagName[0].toLowerCase()} > ${childrenTagName[0].toLowerCase()}`)
-    //
-    // els.forEach(el => {
-    //   el.setAttribute('value', 'NEMANJA')
-    // })
-    // console.log(els)
-    // // console.lo
-
-
-    // const allParents = document.querySelectorAll('selected-element');
-    // const allChildren =
-    //
-    // const inputs = document.querySelectorAll('.selected-element > .btn')
-    // inputs.forEach((el:any) => {
-    //   el.click()
-    // })
   }
 
+  restart() {
+    this.selectedElements.next([])
+    this.currentElement = null;
+    this.loopMode.next(null)
+    this.selectedSubElement.next(undefined)
+    this.renderer2 = this.renderer.createRenderer(null, null);
+  }
 }

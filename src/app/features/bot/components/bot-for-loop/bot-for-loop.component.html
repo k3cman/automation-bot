@@ -1,10 +1,14 @@
 <div *ngIf="elementSelector.selectedElements$ | async as selectedElements">
-  <div *ngIf="selectedElements.length < 2;else selected">Please select at least 2 same elements</div>
+  <div *ngIf="selectedElements.length < 2;else selected" class="text-center mt-2 text-lg">Please select at least 2 same elements</div>
 </div>
 
 <ng-template #selected>
-  Great! You selected 2 elements, we predicted 1 additional element In total 3 elements are selected
-  <app-button (click)="next.emit()">Next</app-button>
+  <div class="flex flex-col">
+    <span class="text-center mt-2 text-lg">
+    Great! You selected 2 elements, we predicted 1 additional element In total 3 elements are selected
+    </span>
+    <app-button class="ml-auto" size="small" (click)="next.emit()">Next</app-button>
+  </div>
 </ng-template>
 
 

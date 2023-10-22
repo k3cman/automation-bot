@@ -9,6 +9,7 @@ import { BotSelectChildComponent } from './components/bot-select-child/bot-selec
 import { BotWizardRunComponent } from './components/bot-wizard-run/bot-wizard-run.component';
 import { BotWizardInitialComponent } from './components/bot-wizard-initial/bot-wizard-initial.component';
 import {ButtonModule} from "../../shared/button/button.module";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -28,7 +29,8 @@ import {ButtonModule} from "../../shared/button/button.module";
     ],
   imports: [
     CommonModule,
-    ButtonModule
+    ButtonModule,
+    ReactiveFormsModule
   ]
 })
 export class BotModule { }

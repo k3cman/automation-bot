@@ -38,6 +38,7 @@ export class BotWizardComponent {
   }
 
   finish() {
-    this.elementSelector.finish()
+    this.elementSelector.restart();
+    this.wizardStep.next(BotWizardSteps.OFF)
   }
 }
