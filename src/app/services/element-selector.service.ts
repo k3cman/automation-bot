@@ -1,5 +1,6 @@
 import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
 import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil, tap} from "rxjs";
+import {preventAll} from "../features/bot/utils/element-selector.helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,8 @@ export class ElementSelectorService {
   }
 
   start():void {
-    this.mouseMove$ = fromEvent<MouseEvent>(document, 'mousemove').pipe(
+    const selectable = document.querySelector('#selectable') as Element;
+    this.mouseMove$ = fromEvent<MouseEvent>(selectable, 'mousemove').pipe(
       takeUntil(this.destroy$)
     );
     this.mouseClick$ = fromEvent(document, 'click').pipe(
@@ -78,11 +80,7 @@ export class ElementSelectorService {
 
   startInElementListening() {
 
-    // window.addEventListener('click', (e) => {
-    //   e.stopPropagation();
-    //   e.stopImmediatePropagation();
-    //   e.preventDefault();
-    // }, true)
+    window.addEventListener('click', preventAll, true)
 
     let currentElement:EventTarget;
     let selectedElement:EventTarget ;
@@ -101,6 +99,8 @@ export class ElementSelectorService {
       console.log(selectedElement)
       this.renderer2.addClass(selectedElement, 'selected-sub-element')
       this.selectedSubElement.next(selectedElement)
+
+      window.removeEventListener('click', preventAll, true)
     })
 
   }
@@ -109,23 +109,40 @@ export class ElementSelectorService {
     console.log(this.selectedElements.getValue())
     console.log(this.selectedSubElement.getValue())
 
-    const allParents = document.querySelectorAll('.selected-element');
+    const parent = document.querySelector('.selected-element') as Element;
     const allChildren = document.querySelectorAll('.selected-sub-element')
 
-    const parentsTagName:string[] = []
-    allParents.forEach(el => parentsTagName.push(el.tagName))
+    const parentsTagName:string = parent.tagName;
+    const parentsClasses = parent.className.replace('hover-border-child','')
+      .replace('selected-sub-element','')
+      .replace('hover-border', '')
+      .replace('selected-element', '')
+      .trim()
 
-    const childrenTagName:string[] = [];
-    allChildren.forEach(el => childrenTagName.push(el.tagName))
+    const parentId = parent.id
+
+    let parentSelector = parentsTagName.toLowerCase()
+    if(parentsClasses && parentsClasses !== ''){
+      const selectors = parentsClasses.replaceAll(' ', '.')
+      parentSelector += ('.' + parentsClasses)
+    }
+
+    if(parentId){
+      parentSelector += '#'+parentId
+    }
+
+    const elements = document.querySelectorAll(parentSelector)
+
+    debugger
 
 
-    const els = document.querySelectorAll(`${parentsTagName[0].toLowerCase()} > ${childrenTagName[0].toLowerCase()}`)
-
-    els.forEach(el => {
-      el.setAttribute('value', 'NEMANJA')
-    })
-    console.log(els)
-    // console.lo
+    // const els = document.querySelectorAll(`${parentsTagName[0].toLowerCase()} > ${childrenTagName[0].toLowerCase()}`)
+    //
+    // els.forEach(el => {
+    //   el.setAttribute('value', 'NEMANJA')
+    // })
+    // console.log(els)
+    // // console.lo
 
 
     // const allParents = document.querySelectorAll('selected-element');
