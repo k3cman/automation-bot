@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
+import {ElementSelectorService} from "./services/element-selector.service";
+import {fromEvent, Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -6,6 +8,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+
+  documentStream = fromEvent('document' as any, 'mousemove');
+
   title = 'coding-challenge-v2';
   tasks = [
     {
@@ -44,6 +49,12 @@ export class AppComponent {
       completed: false,
     },
   ];
+
+  constructor(
+    private elementSelectorService: ElementSelectorService
+  ) {
+    this.elementSelectorService.start()
+  }
 
   addTask(description: string) {
     this.tasks.push({
