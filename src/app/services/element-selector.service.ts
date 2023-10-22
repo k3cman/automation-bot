@@ -1,6 +1,6 @@
 import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
 import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil, tap} from "rxjs";
-import {preventAll, removeHelperClasses} from "../features/bot/utils/element-selector.helpers";
+import {createSelector, preventAll, removeHelperClasses} from "../features/bot/utils/element-selector.helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +91,6 @@ export class ElementSelectorService {
 
 
     fromEvent(this.selectedElements.getValue(), 'mousedown').subscribe(event => {
-
       selectedElement = event.target as any
       console.log(selectedElement)
       this.renderer2.addClass(selectedElement, 'selected-sub-element')
@@ -103,56 +102,22 @@ export class ElementSelectorService {
   }
 
   finish() {
-    console.log(this.selectedElements.getValue())
-    console.log(this.selectedSubElement.getValue())
 
     const parent = document.querySelector('.selected-element') as Element;
+    const parentSelector = createSelector(document.querySelector('.selected-element') as Element);
+    const childSelector = createSelector(document.querySelector('.selected-sub-element') as Element)
 
-    const parentsTagName:string = parent.tagName;
-    const parentsClasses = parent.className.replace('hover-border-child','')
-      .replace('selected-sub-element','')
-      .replace('hover-border', '')
-      .replace('selected-element', '')
-      .trim()
 
-    const parentId = parent.id
-
-    let parentSelector = parentsTagName.toLowerCase()
-    if(parentsClasses && parentsClasses !== ''){
-      const selectors = parentsClasses.replaceAll(' ', '.')
-      parentSelector += ('.' + parentsClasses)
-    }
-
-    if(parentId){
-      parentSelector += '#'+parentId
-    }
-
-    const child = document.querySelector('.selected-sub-element') as Element
-    const childTagName = child.tagName;
-    const childClasses = child.className.replace('hover-border-child','')
-      .replace('selected-sub-element','')
-      .replace('hover-border', '')
-      .replace('selected-element', '')
-      .trim()
-
-    const childId = child.id
-
-    let childSelector = childTagName.toLowerCase()
-    if(childClasses && childClasses !== ''){
-      const selectors = childClasses.replaceAll(' ', '.')
-      childSelector += ('.' + childClasses)
-    }
-
-    if(childId){
-      childSelector += '#'+childId
-    }
 
 
     const elements = document.querySelectorAll(parentSelector + ' > ' + childSelector)
-
+    if(this.loopMode.getValue() === 'INPUT'){
+      elements.forEach(el => el.setAttribute('value', 'nemanja'))
+    }else{
+      elements.forEach(el => (el as any).click())
+    }
 
     removeHelperClasses()
-    debugger
 
 
     // const els = document.querySelectorAll(`${parentsTagName[0].toLowerCase()} > ${childrenTagName[0].toLowerCase()}`)

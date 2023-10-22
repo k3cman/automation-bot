@@ -24,3 +24,27 @@ export const removeHelperClasses = () => {
 
 
 }
+
+
+export const createSelector = (el:Element):string => {
+  const elementTagName:string = el.tagName;
+  const elementClasses = el.className.replace('hover-border-child','')
+    .replace('selected-sub-element','')
+    .replace('hover-border', '')
+    .replace('selected-element', '')
+    .trim()
+
+  const parentId = el.id
+
+  let elementSelector = elementTagName.toLowerCase()
+  if(elementClasses && elementClasses !== ''){
+    const selectors = elementClasses.replaceAll(' ', '.')
+    elementSelector += ('.' + selectors)
+  }
+
+  if(parentId){
+    elementSelector += '#'+parentId
+  }
+
+  return elementSelector
+}
