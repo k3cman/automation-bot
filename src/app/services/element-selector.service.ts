@@ -85,7 +85,8 @@ export class ElementSelectorService {
 
   startInElementListening() {
 
-    window.addEventListener('click', preventAll, true)
+    window.addEventListener('click', this.preventDefault, true)
+    window.addEventListener('mousedown', this.preventDefault, true)
 
     let currentElement:EventTarget;
     let selectedElement:EventTarget ;
@@ -103,7 +104,8 @@ export class ElementSelectorService {
       this.renderer2.addClass(selectedElement, 'selected-sub-element')
       this.selectedSubElement.next(selectedElement)
 
-      window.removeEventListener('click', preventAll, true)
+      window.removeEventListener('click', this.preventDefault, true)
+      window.removeEventListener('mousedown', this.preventDefault, true)
     })
 
   }
@@ -134,5 +136,18 @@ export class ElementSelectorService {
     this.loopMode.next(null)
     this.selectedSubElement.next(undefined)
     this.renderer2 = this.renderer.createRenderer(null, null);
+  }
+
+  private preventDefault(e:MouseEvent) {
+    this.renderer2.addClass(e.target, 'selected-sub-element')
+    this.selectedSubElement.next(e.target)
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    e.preventDefault();
+
+    window.removeEventListener('click', this.preventDefault, true)
+    window.removeEventListener('mousedown', this.preventDefault, true)
+
+
   }
 }
