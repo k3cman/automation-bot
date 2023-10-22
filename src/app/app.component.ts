@@ -53,7 +53,7 @@ export class AppComponent {
   constructor(
     private elementSelectorService: ElementSelectorService
   ) {
-    this.elementSelectorService.start()
+    // this.elementSelectorService.start()
   }
 
   addTask(description: string) {

@@ -1,0 +1,27 @@
+<div [ngSwitch]="wizardStep$ | async">
+  <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.OFF"
+    [title]="'Bot actions'"
+  >
+    <button (click)="start()">Start the bot</button>
+  </app-bot-wizard-container>
+  <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.LOOP"
+  title="Step 1. For loop"
+  >
+    <app-bot-for-loop (nextStep)="childAction()"></app-bot-for-loop>
+  </app-bot-wizard-container>
+  <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.CHILD_ACTION"
+    title="Step 2. Choose and child-action on each loop element"
+  >
+    <app-bot-child-action (nextStep)="childContainer()"></app-bot-child-action>
+  </app-bot-wizard-container>
+  <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.SELECT_CHILD"
+    title="Step 3. Click a button"
+  >
+    <app-bot-select-child (nextStep)="overview()"></app-bot-select-child>
+  </app-bot-wizard-container>
+  <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.RUN_ACTION"
+  title="Finish"
+  >
+    <app-bot-wizard-run></app-bot-wizard-run>
+  </app-bot-wizard-container>
+</div>
