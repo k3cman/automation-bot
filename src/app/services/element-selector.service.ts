@@ -100,7 +100,6 @@ export class ElementSelectorService {
 
     fromEvent(this.selectedElements.getValue(), 'mousedown').subscribe(event => {
       selectedElement = event.target as any
-      console.log(selectedElement)
       this.renderer2.addClass(selectedElement, 'selected-sub-element')
       this.selectedSubElement.next(selectedElement)
 
@@ -129,6 +128,7 @@ export class ElementSelectorService {
   }
 
   restart() {
+    removeHelperClasses()
     this.selectedElements.next([])
     this.currentElement = null;
     this.loopMode.next(null)

@@ -15,4 +15,8 @@ export class BotForLoopComponent extends BotWizardBaseComponent{
     this.elementSelector.start()
   }
 
+  restart() {
+    this.elementSelector.restart()
+    this.elementSelector.start()
+  }
 }

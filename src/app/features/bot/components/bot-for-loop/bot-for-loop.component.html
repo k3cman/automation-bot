@@ -7,7 +7,10 @@
     <span class="text-center mt-2 text-lg">
     Great! You selected 2 elements, we predicted 1 additional element In total 3 elements are selected
     </span>
-    <app-button class="ml-auto" size="small" (click)="next.emit()">Next</app-button>
+    <div class="ml-auto flex gap-2">
+      <app-button class="ml-auto" size="small" (click)="restart()">Reset</app-button>
+      <app-button class="ml-auto" size="small" (click)="next.emit()">Next</app-button>
+    </div>
   </div>
 </ng-template>
 

@@ -4,5 +4,4 @@ export enum BotWizardSteps {
   CHILD_ACTION = 'CHILD_ACTION',
   SELECT_CHILD = 'SELECT_CHILD',
   RUN_ACTION = 'RUN_ACTION',
-  OUTRO = 'OUTRO'
 }
