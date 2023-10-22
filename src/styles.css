@@ -303,5 +303,9 @@ ul.todo-list li .delete:after {
 }
 
 .hover-border-child{
-  @apply border-dashed border-2 border-red-500
+  @apply opacity-30
+}
+
+.selected-sub-element {
+  @apply opacity-30
 }

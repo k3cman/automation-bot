@@ -1,6 +1,6 @@
 import {Injectable, Renderer2, RendererFactory2} from '@angular/core';
 import {BehaviorSubject, fromEvent, Observable, Subject, takeUntil, tap} from "rxjs";
-import {preventAll} from "../features/bot/utils/element-selector.helpers";
+import {preventAll, removeHelperClasses} from "../features/bot/utils/element-selector.helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,8 @@ export class ElementSelectorService {
       if(val.length >= 2){
         this.destroy$.next()
         this.destroy$.complete()
+
+        window.removeEventListener('click', preventAll, true)
       }
     })
   )
@@ -33,23 +35,19 @@ export class ElementSelectorService {
   }
 
   start():void {
+
+    window.addEventListener('click', preventAll, true)
     const selectable = document.querySelector('#selectable') as Element;
     this.mouseMove$ = fromEvent<MouseEvent>(selectable, 'mousemove').pipe(
       takeUntil(this.destroy$)
     );
-    this.mouseClick$ = fromEvent(document, 'click').pipe(
+    this.mouseClick$ = fromEvent(document, 'mousedown').pipe(
       takeUntil(this.destroy$)
     );
 
     setTimeout(() => {
-
       this.listenToMouseClick()
       this.listenToMouseMove()
-    })
-
-    fromEvent(document, 'click').subscribe(event => {
-      event.preventDefault()
-      event.stopPropagation()
     })
 
     this.selectedElements.next([])
@@ -57,7 +55,6 @@ export class ElementSelectorService {
 
   private listenToMouseClick(){
     this.mouseClick$.subscribe(data => {
-      console.log(data);
       this.selectedElements.next([...this.selectedElements.getValue(), data.target as EventTarget])
       this.renderer2.addClass(data.target, 'selected-element')
     })
@@ -84,7 +81,7 @@ export class ElementSelectorService {
 
     let currentElement:EventTarget;
     let selectedElement:EventTarget ;
-    fromEvent(this.selectedElements.getValue()[0], 'mousemove').subscribe(data => {
+    fromEvent(this.selectedElements.getValue(), 'mousemove').subscribe(data => {
       if(currentElement){
         this.renderer2.removeClass(currentElement, 'hover-border-child')
       }
@@ -93,7 +90,7 @@ export class ElementSelectorService {
     })
 
 
-    fromEvent(this.selectedElements.getValue()[0], 'mousedown').subscribe(event => {
+    fromEvent(this.selectedElements.getValue(), 'mousedown').subscribe(event => {
 
       selectedElement = event.target as any
       console.log(selectedElement)
@@ -110,7 +107,6 @@ export class ElementSelectorService {
     console.log(this.selectedSubElement.getValue())
 
     const parent = document.querySelector('.selected-element') as Element;
-    const allChildren = document.querySelectorAll('.selected-sub-element')
 
     const parentsTagName:string = parent.tagName;
     const parentsClasses = parent.className.replace('hover-border-child','')
@@ -131,8 +127,31 @@ export class ElementSelectorService {
       parentSelector += '#'+parentId
     }
 
-    const elements = document.querySelectorAll(parentSelector)
+    const child = document.querySelector('.selected-sub-element') as Element
+    const childTagName = child.tagName;
+    const childClasses = child.className.replace('hover-border-child','')
+      .replace('selected-sub-element','')
+      .replace('hover-border', '')
+      .replace('selected-element', '')
+      .trim()
 
+    const childId = child.id
+
+    let childSelector = childTagName.toLowerCase()
+    if(childClasses && childClasses !== ''){
+      const selectors = childClasses.replaceAll(' ', '.')
+      childSelector += ('.' + childClasses)
+    }
+
+    if(childId){
+      childSelector += '#'+childId
+    }
+
+
+    const elements = document.querySelectorAll(parentSelector + ' > ' + childSelector)
+
+
+    removeHelperClasses()
     debugger
 
 
