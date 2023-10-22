@@ -1,8 +1,8 @@
-<div [ngSwitch]="wizardStep$ | async">
+<div [ngSwitch]="wizardStep$ | async" class="max-w-5xl w-5xl ml-auto mr-auto h-full">
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.OFF"
-    [title]="'Bot actions'"
+
   >
-    <button (click)="start()">Start the bot</button>
+    <app-bot-wizard-initial (next)="start()"></app-bot-wizard-initial>
   </app-bot-wizard-container>
   <app-bot-wizard-container *ngSwitchCase="BotWizardSteps.LOOP"
   title="Step 1. For loop"

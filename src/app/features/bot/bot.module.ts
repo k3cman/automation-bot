@@ -7,6 +7,8 @@ import { BotForLoopComponent } from './components/bot-for-loop/bot-for-loop.comp
 import { BotChildActionComponent } from './components/bot-child-action/bot-child-action.component';
 import { BotSelectChildComponent } from './components/bot-select-child/bot-select-child.component';
 import { BotWizardRunComponent } from './components/bot-wizard-run/bot-wizard-run.component';
+import { BotWizardInitialComponent } from './components/bot-wizard-initial/bot-wizard-initial.component';
+import {ButtonModule} from "../../shared/button/button.module";
 
 
 
@@ -18,13 +20,15 @@ import { BotWizardRunComponent } from './components/bot-wizard-run/bot-wizard-ru
         BotForLoopComponent,
         BotChildActionComponent,
         BotSelectChildComponent,
-        BotWizardRunComponent
+        BotWizardRunComponent,
+        BotWizardInitialComponent
     ],
     exports: [
         BotComponent
     ],
-    imports: [
-        CommonModule
-    ]
+  imports: [
+    CommonModule,
+    ButtonModule
+  ]
 })
 export class BotModule { }
